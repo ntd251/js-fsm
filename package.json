@@ -1,0 +1,19 @@
+{
+  "name": "js-fsm",
+  "version": "0.0.1",
+  "description": "JS Finite State Machine",
+  "main": "index.js",
+  "scripts": {
+    "test": "karma start --single-run"
+  },
+  "keywords": [
+    "fsm",
+    "js-fsm",
+    "finite state machine",
+    "state machine"
+  ],
+  "devDependencies": {
+    "babel-preset-es2015": "^6.1.18"
+  }
+}
+
