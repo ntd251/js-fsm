@@ -13,3 +13,9 @@
   - method name
   - method
   - preferrably return state data
+
+
+# Best Practices
+
+- `action` and `using` should not refer to `state` and `stateData` value
+- `using` is recommended to return `StateData`

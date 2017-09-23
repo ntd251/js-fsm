@@ -81,3 +81,26 @@ fsm.receive('start');
 fsm.state; // started
 fsm.stateData; // HAS_FUEL
 
+
+let transitionMap = {
+  started: {
+    has_fuel: {
+      speedUp: {
+        stay: '',
+        using: '',
+        goto: '',
+      },
+    },
+
+    else: {
+      speedUp: {
+        stay: '',
+        using: '',
+        goto: '',
+      },
+    },
+  },
+};
+
+
+
