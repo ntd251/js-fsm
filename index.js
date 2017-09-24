@@ -11,3 +11,32 @@ window.FSM = {
   StateEvent: StateEvent,
   Core: FsmCore,
 };
+
+// Examples - TODO: organize
+
+window.fsm = new FSM.Core();
+
+fsm.registerInitialState('stopped');
+fsm.registerInitialStateData('hasFuel');
+
+let transitions = [
+  fsm.generateTransition('stopped', 'hasFuel', 'start', 'started', 'startEngine'),
+  fsm.generateStayTransition('stopped', 'hasFuel', 'releaseGas', 'releaseGas'),
+  fsm.generateTransition('stopped', 'noFuel', 'pumpGas', 'started', 'pumpGas'),
+  fsm.generateStayTransition('stopped', 'noFuel', 'start', 'alertNoFuel'),
+  fsm.generateTransition('started', 'any', 'stop', 'stopped'),
+];
+
+transitions.forEach((transition) => fsm.registerTransition(transition));
+
+fsm.registerAction('startEngine', () => console.log('Starting Engine'));
+fsm.registerAction('alertNoFuel', () => console.log('No Fuel, cant start'));
+fsm.registerAction('pumpGas', (event) => new StateData('hasFuel'));
+fsm.registerAction('releaseGas', (event) => new StateData('noFuel'));
+
+fsm.initialize();
+
+fsm.receive('start');
+fsm.receive('stop');
+fsm.receive('releaseGas');
+fsm.receive('start');
