@@ -44,17 +44,12 @@ let payload = {
   },
 
   afterTransition: [
-    {
-      from: 'pending',
-      to: 'started',
-      do: 'speedUp',
-    },
+    { from: 'pending', to: 'started', do: 'speedUp', },
   ],
 
-  // Alternative
-  afterTransition: {
-    'a -> b': 'speedUp', // not so good
-  }
+  stateTimeout: {
+    pending: 1000,
+  },
 
   actionStore: {
     startEngine: (event) => {
@@ -74,12 +69,12 @@ fsm.updateActionStore({
 
 fsm.initialize();
 
-fsm.state; // pending
-fsm.stateData; // HAS_FUEL
+fsm.getState(); // pending
+fsm.gestStateData(); // HAS_FUEL
 
 fsm.receive('start');
-fsm.state; // started
-fsm.stateData; // HAS_FUEL
+fsm.getState(); // started
+fsm.getStateData(); // HAS_FUEL
 
 
 let transitionMap = {

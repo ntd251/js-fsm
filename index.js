@@ -20,11 +20,12 @@ fsm.registerInitialState('stopped');
 fsm.registerInitialStateData('hasFuel');
 
 let transitions = [
-  fsm.generateTransition('stopped', 'hasFuel', 'start', 'started', 'startEngine'),
-  fsm.generateStayTransition('stopped', 'hasFuel', 'releaseGas', 'releaseGas'),
-  fsm.generateTransition('stopped', 'noFuel', 'pumpGas', 'started', 'pumpGas'),
-  fsm.generateStayTransition('stopped', 'noFuel', 'start', 'alertNoFuel'),
-  fsm.generateTransition('started', 'any', 'stop', 'stopped'),
+'stopped', 'hasFuel', 'start', 'started', 'startEngine'
+  fsm.generateTransition('stopped', 'hasFuel').receive('start').goto('started').using('startEngine'),
+  fsm.generateTransition('stopped', 'hasFuel').receive('releaseGas').stay().using('releaseGas'),
+  fsm.generateTransition('stopped', 'noFuel').receive('pumpGas').stay().using('pumpGas'),
+  fsm.generateTransition('stopped', 'noFuel').receive('start').stay().using('alertNoFuel'),
+  fsm.generateTransition('started', 'any').receive('stop').goto('stopped'),
 ];
 
 transitions.forEach((transition) => fsm.registerTransition(transition));
