@@ -60,12 +60,12 @@ let fsm = new StateMachine();
 
 fsm.startWith('stopped', 'hasFuel');
 
-fsm.transitionFrom('stopped', 'hasFuel')
+fsm.when('stopped', 'hasFuel')
    .receive('start')
    .goto('started')
    .using('startEngine');
 
-fsm.transitionFrom('started', 'any')
+fsm.when('started', 'any')
    .receive('stop')
    .goto('stopped');
 

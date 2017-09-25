@@ -21,27 +21,27 @@ fsm.startWith('stopped', 'hasFuel');
 /**
  * Transition
  */
-fsm.transitionFrom('stopped', 'hasFuel')
+fsm.when('stopped', 'hasFuel')
    .receive('start')
    .goto('started')
    .using('startEngine');
 
-fsm.transitionFrom('stopped', 'hasFuel')
+fsm.when('stopped', 'hasFuel')
    .receive('releaseGas')
    .stay()
    .using('releaseGas');
 
-fsm.transitionFrom('stopped', 'noFuel')
+fsm.when('stopped', 'noFuel')
    .receive('pumpGas')
    .stay()
    .using('pumpGas');
 
-fsm.transitionFrom('stopped', 'noFuel')
+fsm.when('stopped', 'noFuel')
    .receive('start')
    .stay()
    .using('alertNoFuel');
 
-fsm.transitionFrom('started', 'any')
+fsm.when('started', 'any')
    .receive('stop')
    .goto('stopped');
 
