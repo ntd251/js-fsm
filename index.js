@@ -16,19 +16,49 @@ window.FSM = {
 
 window.fsm = new FSM.Core();
 
-fsm.registerInitialState('stopped');
-fsm.registerInitialStateData('hasFuel');
+fsm.startWith('stopped', 'hasFuel');
 
-let transitions = [
-  fsm.generateTransition('stopped', 'hasFuel').receive('start').goto('started').using('startEngine'),
-  fsm.generateTransition('stopped', 'hasFuel').receive('releaseGas').stay().using('releaseGas'),
-  fsm.generateTransition('stopped', 'noFuel').receive('pumpGas').stay().using('pumpGas'),
-  fsm.generateTransition('stopped', 'noFuel').receive('start').stay().using('alertNoFuel'),
-  fsm.generateTransition('started', 'any').receive('stop').goto('stopped'),
-];
+/**
+ * Transition
+ */
+fsm.transitionFrom('stopped', 'hasFuel')
+   .receive('start')
+   .goto('started')
+   .using('startEngine');
 
-transitions.forEach((transition) => fsm.registerTransition(transition));
+fsm.transitionFrom('stopped', 'hasFuel')
+   .receive('releaseGas')
+   .stay()
+   .using('releaseGas');
 
+fsm.transitionFrom('stopped', 'noFuel')
+   .receive('pumpGas')
+   .stay()
+   .using('pumpGas');
+
+fsm.transitionFrom('stopped', 'noFuel')
+   .receive('start')
+   .stay()
+   .using('alertNoFuel');
+
+fsm.transitionFrom('started', 'any')
+   .receive('stop')
+   .goto('stopped');
+
+/**
+ * After transition
+ */
+fsm.afterTransitionFrom('stopped')
+   .to('started')
+   .do(() => { console.log('RUNNING') });
+
+fsm.afterTransitionFrom('started')
+   .to('stopped')
+   .do(() => { console.log('STOPPED') });
+
+/**
+ * Actions
+ */
 fsm.registerAction('startEngine', () => console.log('Starting Engine'));
 fsm.registerAction('alertNoFuel', () => console.log('No Fuel, cant start'));
 fsm.registerAction('pumpGas', (event) => new StateData('hasFuel'));
@@ -40,3 +70,7 @@ fsm.receive('start');
 fsm.receive('stop');
 fsm.receive('releaseGas');
 fsm.receive('start');
+
+// window.stateMachine = new StateMachine(config);
+
+
