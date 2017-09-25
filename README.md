@@ -31,11 +31,14 @@ let config = {
         {
           event: 'start',
           stay: true
-        },
+        }
+      ]
+    },
+    started: {
+      any: [
         {
-          event: 'pump_gas',
-          stay: true,
-          using: 'checkGasTank'
+          event: 'stop',
+          goto: 'stopped'
         }
       ]
     }
@@ -53,23 +56,35 @@ let config = {
 ### Using JavaScript DSL
 
 ```js
-let fsm = new FSM();
-fsm.startsWith('stopped', 'has_fuel');
+let fsm = new StateMachine();
 
-let transition = new StateTransition();
-transition.from('stopped', 'has_fuel')
-          .receive('start')
-          .goto('running')
-          .with('startEngine');
+fsm.startWith('stopped', 'hasFuel');
 
-fsm.registerTransition(transition);
+fsm.transitionFrom('stopped', 'hasFuel')
+   .receive('start')
+   .goto('started')
+   .using('startEngine');
+
+fsm.transitionFrom('started', 'any')
+   .receive('stop')
+   .goto('stopped');
+
+fsm.afterTransitionFrom('stopped')
+   .to('started')
+   .do(() => { console.log('RUNNING') });
+
+fsm.afterTransitionFrom('started')
+   .to('stopped')
+   .do(() => { console.log('STOPPED') });
+
+fsm.registerAction('startEngine', () => console.log('Starting Engine'));
+
 fsm.initialize();
 
-fsm.getState(); // stopped
-fsm.getStateData(); // has_fuel
-fsm.start();
-fsm.getState(); // running
-fsm.getStateData(); // has_fuel
+fsm.receive('start');
+fsm.receive('stop');
+fsm.receive('releaseGas');
+fsm.receive('start');
 ```
 
 ## Features
